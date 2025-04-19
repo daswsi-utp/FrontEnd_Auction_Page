@@ -19,9 +19,11 @@ const LoginPage = () => {
     <div className={styles.loginContainer}>
       <div className={styles.loginBox}>
         <div className={styles.icon}>
-          <img src="/path/to/user-icon.png" alt="User Icon" />
+          {/* Asegúrate de que la imagen esté en la carpeta public/img/ */}
+          <img src="/img/avatar.png" alt="login-img" />
+
         </div>
-        <h1 className={styles.title}>Login UI</h1> {/* Aplica la clase title aquí */}
+        <h1 className={styles.title}>Login</h1>
         <form onSubmit={handleSubmit}>
           <div className={styles.inputGroup}>
             <label htmlFor="username">Username</label>
@@ -61,15 +63,14 @@ const LoginPage = () => {
           </div>
 
           <div className={styles.links}>
-          <a href="/forgot-password" className={styles.forgotPassword}>
-            Forgot password?
-          </a>
-          <br />
-          <a href="/auth/register" className={styles.forgotPassword}>
-            ¿Deseas registrarte?
-          </a>
-        </div>
-
+            <a href="/forgot-password" className={styles.forgotPassword}>
+              Forgot password?
+            </a>
+            <br />
+            <a href="/auth/register" className={styles.forgotPassword}>
+              ¿Deseas registrarte?
+            </a>
+          </div>
 
           <button type="submit" className={styles.loginButton}>
             Login
