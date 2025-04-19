@@ -21,7 +21,7 @@ const UserProfile = () => {
     <div className={styles.profileContainer}>
       <div className={styles.profileCard}>
         <div className={styles.avatarSection}>
-          <img src={user.avatar} alt="Avatar" className={styles.avatar} />
+          <img src="/img/avatar.png" alt="Avatar" className={styles.avatar} />
           <h2>{user.name}</h2>
           <p className={styles.role}>{user.role}</p>
         </div>
