@@ -92,4 +92,4 @@ Plataforma web de subastas desarrollada con **Next.js** (frontend), **Java Web**
 
 1. Clona el repositorio:
 ```bash
-git clone https://github.com/usuario/repositorio-subastas.git
+git clone https://github.com/daswsi-utp/FrontEnd_Auction_Page.git
