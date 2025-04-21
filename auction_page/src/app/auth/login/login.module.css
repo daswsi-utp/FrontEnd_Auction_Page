@@ -1,11 +1,10 @@
 /* src/app/auth/login/login.module.css */
-
 .loginContainer {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(45deg, #6a11cb, #2575fc); /* Fondo degradado */
+  background: linear-gradient(45deg, #6a11cb, #2575fc);
 }
 
 .loginBox {
@@ -41,6 +40,7 @@
 .inputGroup {
   margin-bottom: 20px;
   text-align: left;
+  position: relative;
 }
 
 .inputGroup label {
@@ -59,20 +59,24 @@
   margin-top: 5px;
 }
 
-.inputGroup input:focus {
-  border-color: #2575fc;
-  outline: none;
-  box-shadow: 0 0 5px rgba(37, 117, 252, 0.4);
+.passwordWrapper {
+  position: relative;
 }
 
 .showPassword {
   position: absolute;
-  right: 20px;
+  right: 12px;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
   font-size: 18px;
   color: #2575fc;
+}
+
+.inputGroup input:focus {
+  border-color: #2575fc;
+  outline: none;
+  box-shadow: 0 0 5px rgba(37, 117, 252, 0.4);
 }
 
 .rememberMe {
@@ -94,6 +98,7 @@
   color: #2575fc;
   text-decoration: none;
   font-size: 12px;
+  cursor: pointer;
 }
 
 .forgotPassword:hover {
@@ -116,7 +121,62 @@
   background-color: #1e65d8;
 }
 
-/* Estilos responsivos */
+/* Modal */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.modalContent input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.modalButtons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.modalButtons button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modalButtons button:first-child {
+  background-color: #2575fc;
+  color: white;
+}
+
+.modalButtons button:last-child {
+  background-color: #ccc;
+  color: #333;
+}
+
+/* Responsivo */
 @media (max-width: 480px) {
   .loginBox {
     width: 90%;
@@ -135,3 +195,5 @@
     padding: 12px;
   }
 }
+
+
