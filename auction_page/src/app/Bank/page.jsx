@@ -5,14 +5,14 @@ import styles from './bank.module.css';
 
 function BankForm() {
   const [formData, setFormData] = useState({
-    banco: '',
-    numeroCuenta: '',
-    tipoCuenta: '',
-    titular: '',
+    bank: '',
+    accountNumber: '',
+    accountType: '',
+    accountHolder: '',
     cci: ''
   });
 
-  const [mensaje, setMensaje] = useState('');
+  const [message, setMessage] = useState('');
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -21,98 +21,98 @@ function BankForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const { banco, numeroCuenta, tipoCuenta, titular } = formData;
+    const { bank, accountNumber, accountType, accountHolder } = formData;
 
-    if (!banco || !numeroCuenta || !tipoCuenta || !titular) {
-      alert('Por favor, completa todos los campos requeridos.');
+    if (!bank || !accountNumber || !accountType || !accountHolder) {
+      alert('Please fill out all required fields.');
       return;
     }
 
-    const cuentas = JSON.parse(localStorage.getItem('cuentasBancarias')) || [];
-    cuentas.push(formData);
-    localStorage.setItem('cuentasBancarias', JSON.stringify(cuentas));
+    const savedAccounts = JSON.parse(localStorage.getItem('bankAccounts')) || [];
+    savedAccounts.push(formData);
+    localStorage.setItem('bankAccounts', JSON.stringify(savedAccounts));
 
-    setMensaje('✅ Cuenta registrada exitosamente.');
+    setMessage('✅ Bank account registered successfully!');
     setFormData({
-      banco: '',
-      numeroCuenta: '',
-      tipoCuenta: '',
-      titular: '',
+      bank: '',
+      accountNumber: '',
+      accountType: '',
+      accountHolder: '',
       cci: ''
     });
 
-    setTimeout(() => setMensaje(''), 3000);
+    setTimeout(() => setMessage(''), 3000);
   };
 
   return (
     <div className={styles.container}>
       <form className={styles.form} onSubmit={handleSubmit}>
-        <h2 className={styles.title}>Registrar Cuenta Bancaria</h2>
+        <h2 className={styles.title}>Bank Account Registration</h2>
 
         <div className={styles.inputBox}>
-          <label>Banco</label>
+          <label>Bank</label>
           <input
             type="text"
-            name="banco"
-            value={formData.banco}
+            name="bank"
+            value={formData.bank}
             onChange={handleChange}
-            placeholder="Nombre del banco"
+            placeholder="Enter bank name"
             required
           />
         </div>
 
         <div className={styles.inputBox}>
-          <label>Número de Cuenta</label>
+          <label>Account Number</label>
           <input
             type="text"
-            name="numeroCuenta"
-            value={formData.numeroCuenta}
+            name="accountNumber"
+            value={formData.accountNumber}
             onChange={handleChange}
-            placeholder="Ej: 1234567890"
+            placeholder="e.g. 1234567890"
             required
           />
         </div>
 
         <div className={styles.inputBox}>
-          <label>Tipo de Cuenta</label>
+          <label>Account Type</label>
           <input
             type="text"
-            name="tipoCuenta"
-            value={formData.tipoCuenta}
+            name="accountType"
+            value={formData.accountType}
             onChange={handleChange}
-            placeholder="Ahorros o Corriente"
+            placeholder="Savings or Checking"
             required
           />
         </div>
 
         <div className={styles.inputBox}>
-          <label>Titular</label>
+          <label>Account Holder</label>
           <input
             type="text"
-            name="titular"
-            value={formData.titular}
+            name="accountHolder"
+            value={formData.accountHolder}
             onChange={handleChange}
-            placeholder="Nombre del titular"
+            placeholder="Full name of account holder"
             required
           />
         </div>
 
         <div className={styles.inputBox}>
-          <label>CCI (opcional)</label>
+          <label>CCI (optional)</label>
           <input
             type="text"
             name="cci"
             value={formData.cci}
             onChange={handleChange}
-            placeholder="Código CCI"
+            placeholder="CCI Code"
           />
         </div>
 
         <button type="submit" className={styles.button}>
-          Registrar Cuenta
+          Register Account
         </button>
 
-        {mensaje && <p className={styles.success}>{mensaje}</p>}
+        {message && <p className={styles.success}>{message}</p>}
       </form>
     </div>
   );
