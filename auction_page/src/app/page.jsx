@@ -1,16 +1,16 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import imagen1 from './img/imagen1.jpg';
-import imagen2 from './img/imagen2.jpg';
-import imagen3 from './img/imagen3.jpg';
+//import imagen1 from './img/imagen1.jpg';
+//import imagen2 from './img/imagen2.jpg';
+//import imagen3 from './img/imagen3.jpg';
 
 export default function HomePage() {
   const productos = [
     //por ahora apunta a registro para pruebas
-    { id: 1, nombre: 'Reloj antiguo', img: imagen1, ruta: '/Auth/Register' },
-    { id: 2, nombre: 'Obra de arte', img: imagen2, ruta: '/Auth/Register' },
-    { id: 3, nombre: 'Cámara vintage', img: imagen3, ruta: '/Auth/Register' },
+    //{ id: 1, nombre: 'Reloj antiguo', img: imagen1, ruta: '/Auth/Register' },
+    //{ id: 2, nombre: 'Obra de arte', img: imagen2, ruta: '/Auth/Register' },
+    //{ id: 3, nombre: 'Cámara vintage', img: imagen3, ruta: '/Auth/Register' },
   ];
 
   return (
