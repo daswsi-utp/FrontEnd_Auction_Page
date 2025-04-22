@@ -41,7 +41,8 @@ export default function Header() {
 
             {dropdownOpen && (
               <div className="absolute mt-2 w-48 bg-white text-black rounded shadow-lg right-0">
-                <Link href="/cuenta">
+                {/* Enlace actualizado a la ruta '/profile' */}
+                <Link href="/profile">
                   <span
                     onClick={() => setDropdownOpen(false)}
                     className="block w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"

@@ -5,51 +5,51 @@
     padding: 40px 20px;
     min-height: 100vh;
     background: linear-gradient(135deg, #43cea2, #185a9d);
-  }
-  
-  .form {
+}
+
+.form {
     background: #fff;
     padding: 30px;
     border-radius: 12px;
     width: 100%;
     max-width: 600px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-  }
-  
-  .title {
+}
+
+.title {
     font-size: 24px;
     font-weight: bold;
     color: #185a9d;
     text-align: center;
     margin-bottom: 30px;
-  }
-  
-  .inputBox {
+}
+
+.inputBox {
     margin-bottom: 18px;
-  }
-  
-  .inputBox label {
+}
+
+.inputBox label {
     display: block;
     margin-bottom: 6px;
     font-weight: 500;
     color: #333;
-  }
-  
-  .inputBox input {
+}
+
+.inputBox input {
     width: 100%;
     padding: 12px;
     font-size: 14px;
     border: 1px solid #ccc;
     border-radius: 6px;
     background-color: #f9f9f9;
-  }
-  
-  .inputBox input:focus {
+}
+
+.inputBox input:focus {
     border-color: #185a9d;
     outline: none;
-  }
-  
-  .button {
+}
+
+.button {
     width: 100%;
     padding: 14px;
     background-color: #185a9d;
@@ -59,16 +59,31 @@
     border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-  }
-  
-  .button:hover {
+}
+
+.button:hover {
     background-color: #124f87;
-  }
-  
-  .success {
+}
+
+.success {
     margin-top: 20px;
     text-align: center;
     color: green;
     font-weight: 500;
-  }
-  
+}
+
+/* Nueva clase para el botón "Regresar a Mi Cuenta" */
+.returnButton {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.returnButton .button {
+    background-color: #007bff;
+    width: 200px;
+}
+
+.returnButton .button:hover {
+    background-color: #0056b3;
+}

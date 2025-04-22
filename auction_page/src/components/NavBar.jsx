@@ -43,12 +43,6 @@ export default function NavBar() {
           <Link href="/" className="hover:text-blue-400 transition-colors flex items-center gap-2">
             🏠 {isOpen && 'Inicio'}
           </Link>
-          <Link href="/Auth/Register" className="hover:text-blue-400 transition-colors flex items-center gap-2">
-            📝 {isOpen && 'Registro'}
-          </Link>
-          <Link href="/bank" className="hover:text-blue-400 transition-colors flex items-center gap-2">
-            🏦 {isOpen && 'Cuenta Bancaria'}
-          </Link>
 
           {/* Menú de categorías */}
           <div className="relative">
