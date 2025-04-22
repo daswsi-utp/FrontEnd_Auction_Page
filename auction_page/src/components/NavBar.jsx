@@ -25,6 +25,7 @@ export default function NavBar() {
         <nav className="flex flex-col gap-4 p-4">
           <Link href="/" className="hover:text-blue-400 transition-colors">🏠 {isOpen && 'Inicio'}</Link>
           <Link href="/Auth/Register" className="hover:text-blue-400 transition-colors">📝 {isOpen && 'Registro'}</Link>
+          <Link href="/bank" className="hover:text-blue-400 transition-colors">🏦 {isOpen && 'Cuenta Bancaria'}</Link>
           {/* AQUI PONDRE LOS OTROS LINKS */}
         </nav>
       </div>
