@@ -1,37 +1,38 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link'; 
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import styles from './profile.module.css';
 
 const UserProfile = () => {
   const [user, setUser] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
-    // const storedUser = localStorage.getItem('user');
-    // if (storedUser) {
-    //   setUser(JSON.parse(storedUser));
-    // } else {
-    //   window.location.href = '/auth/login';
-    // }
-
-    // Datos ficticios temporales:
+    // Simulación de carga de datos de usuario (puedes reemplazarlo con localStorage)
     setUser({
       name: 'John Doe',
       role: 'Usuario',
       email: 'johndoe@example.com',
       joined: '2023-01-15',
       auctionsCreated: 5,
-      bidsPlaced: 15
+      bidsPlaced: 15,
     });
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+    router.push('/'); // Redirige al inicio
+  };
 
   const fakeBids = [
     { item: 'Reloj vintage', amount: '$120', date: '2025-04-20' },
     { item: 'Laptop gamer', amount: '$750', date: '2025-04-19' },
     { item: 'Bicicleta urbana', amount: '$200', date: '2025-04-18' },
     { item: 'Smartphone nuevo', amount: '$500', date: '2025-04-17' },
-    { item: 'Cámara digital', amount: '$300', date: '2025-04-16' }
+    { item: 'Cámara digital', amount: '$300', date: '2025-04-16' },
   ];
 
   const fakeHistory = [
@@ -39,7 +40,7 @@ const UserProfile = () => {
     { item: 'Silla ergonómica', price: '$150', result: 'Perdida' },
     { item: 'Monitor 27"', price: '$250', result: 'Ganada' },
     { item: 'Tablet', price: '$180', result: 'Perdida' },
-    { item: 'Auriculares inalámbricos', price: '$85', result: 'Ganada' }
+    { item: 'Auriculares inalámbricos', price: '$85', result: 'Ganada' },
   ];
 
   if (!user) return <div className={styles.loading}>Cargando perfil...</div>;
@@ -47,7 +48,6 @@ const UserProfile = () => {
   return (
     <div className={styles.profileContainer}>
       <div className={styles.profileContent}>
-        {/* Tarjeta principal */}
         <div className={styles.profileCard}>
           <div className={styles.avatarSection}>
             <img src="/img/avatar.png" alt="Avatar" className={styles.avatar} />
@@ -78,16 +78,14 @@ const UserProfile = () => {
             </div>
 
             <div className={styles.actions}>
-              <button className={styles.button} onClick={() => alert('Editar perfil aún no implementado')}>
-                Editar perfil
-              </button>
-              <button className={styles.button} onClick={() => {
-                localStorage.removeItem('user');
-                window.location.href = '/Auth/login';
-              }}>
+              <Link href="/profile/edit">
+                <button className={styles.button}>
+                  Editar perfil
+                </button>
+              </Link>
+              <button className={styles.button} onClick={handleLogout}>
                 Cerrar sesión
               </button>
-              {/* Botón para registrar cuenta */}
               <Link href="/Bank">
                 <button className={styles.button}>
                   Registrar cuenta
@@ -97,7 +95,6 @@ const UserProfile = () => {
           </div>
         </div>
 
-        {/* Panel derecho con últimas pujas y subastas */}
         <div className={styles.dashboard}>
           <div className={styles.bidsSection}>
             <h3>Últimas pujas</h3>

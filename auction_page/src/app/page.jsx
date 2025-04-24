@@ -16,7 +16,7 @@ export default function HomePage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {productos.map((producto) => (
-          <Link key={producto.id} href={producto.ruta} className="group">
+          <Link key={producto.id} href={`/auction/${producto.id}`} className="group">
             <div className="bg-gray-800 rounded-xl overflow-hidden shadow-md hover:scale-105 transition-transform">
               <Image
                 src={producto.img}
