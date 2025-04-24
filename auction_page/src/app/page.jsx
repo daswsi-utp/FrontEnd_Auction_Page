@@ -6,6 +6,7 @@ export default function HomePage() {
     { id: 1, nombre: 'Reloj antiguo', img: '/img/imagen1.jpg', ruta: '/SalePage' },
     { id: 2, nombre: 'Obra de arte', img: '/img/imagen2.jpg', ruta: '/SalePage' },
     { id: 3, nombre: 'Cámara vintage', img: '/img/imagen3.jpg', ruta: '/SalePage' },
+
   ];
 
   return (

@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 
 import Link from 'next/link';
 import { useState } from 'react';
@@ -17,6 +18,7 @@ export default function Header() {
   };
 
   return (
+
     <header className="bg-gray-800 text-white py-4 px-6 shadow-md sticky top-0 z-50">
       <div className="flex justify-between items-center">
         {/* Título de la aplicación a la izquierda */}
@@ -60,6 +62,7 @@ export default function Header() {
             )}
           </div>
         )}
+
       </div>
     </header>
   );
