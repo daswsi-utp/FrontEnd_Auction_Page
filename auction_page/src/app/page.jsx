@@ -3,9 +3,9 @@ import Link from 'next/link';
 
 export default function HomePage() {
   const productos = [
-    { id: 1, nombre: 'Reloj antiguo', img: '/img/imagen1.jpg', ruta: '/SalePage' },
-    { id: 2, nombre: 'Obra de arte', img: '/img/imagen2.jpg', ruta: '/SalePage' },
-    { id: 3, nombre: 'Cámara vintage', img: '/img/imagen3.jpg', ruta: '/SalePage' },
+    { id: 1, nombre: 'Reloj antiguo', img: '/img/imagen1.jpg' },
+    { id: 2, nombre: 'Obra de arte', img: '/img/imagen2.jpg' },
+    { id: 3, nombre: 'Cámara vintage', img: '/img/imagen3.jpg' },
   ];
 
   return (
@@ -15,7 +15,7 @@ export default function HomePage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {productos.map((producto) => (
-          <Link key={producto.id} href={producto.ruta} className="group">
+          <Link key={producto.id} href={`/auction/${producto.id}`} className="group">
             <div className="bg-gray-800 rounded-xl overflow-hidden shadow-md hover:scale-105 transition-transform">
               <Image
                 src={producto.img}

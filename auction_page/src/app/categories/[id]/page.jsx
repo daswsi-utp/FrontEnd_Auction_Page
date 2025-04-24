@@ -1,1 +1,0 @@
-//Here is a dynamic folder, let's link it with the database.
