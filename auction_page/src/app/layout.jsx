@@ -1,9 +1,12 @@
-'use client';
-
+// src/app/layout.jsx
 import './globals.css';
+import NavBar from '../components/NavBar';
+import Header from '../components/Header';
 
-import NavBar from '../components/NavBar.jsx';
-import Header from '../components/Header.jsx';
+export const metadata = {
+  title: 'Página de Subastas',
+  description: 'Subastas en línea con estilo',
+};
 
 export default function RootLayout({ children }) {
   return (

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';  // Importamos Link para la navegación
+import Link from 'next/link'; 
 import styles from './profile.module.css';
 
 const UserProfile = () => {
@@ -83,7 +83,7 @@ const UserProfile = () => {
               </button>
               <button className={styles.button} onClick={() => {
                 localStorage.removeItem('user');
-                window.location.href = '/auth/login';
+                window.location.href = '/Auth/login';
               }}>
                 Cerrar sesión
               </button>
