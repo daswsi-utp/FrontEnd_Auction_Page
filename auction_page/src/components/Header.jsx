@@ -1,5 +1,4 @@
 'use client';
-import Link from 'next/link';
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -52,27 +51,28 @@ export default function Header() {
                 {user.name} ⬇
               </button>
 
-            {dropdownOpen && (
-              <div className="absolute mt-2 w-48 bg-white text-black rounded shadow-lg right-0">
-                {/* Enlace actualizado a la ruta '/profile' */}
-                <Link href="/profile">
+              {dropdownOpen && (
+                <div className="absolute mt-2 w-48 bg-white text-black rounded shadow-lg right-0">
+                  <Link href="/profile">
+                    <span
+                      onClick={() => setDropdownOpen(false)}
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      Mi cuenta
+                    </span>
+                  </Link>
                   <span
-                    onClick={() => setDropdownOpen(false)}
+                    onClick={handleLogout}
                     className="block w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
                   >
-                    Mi cuenta
+                    Log Out
                   </span>
-                </Link>
-                <span
-                  onClick={handleLogout}
-                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                >
-                  Log Out
-                </span>
-              </div>
-            )}
-          </div>
-        )}
+
+                </div>
+              )}
+            </div>
+          )}
+        </div>
 
       </div>
     </header>
