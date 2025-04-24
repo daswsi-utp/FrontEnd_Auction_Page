@@ -10,7 +10,9 @@ export default function NavBar() {
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearch = (event) => {
+
     setSearchQuery(event.target.value);
+
   };
 
   const toggleSidebar = () => {
@@ -28,7 +30,9 @@ export default function NavBar() {
         </div>
 
         <nav className="flex flex-col gap-4 p-4">
+
           {/* Barra de búsqueda */}
+
           <div className="relative mb-4">
             <input
               type="text"
@@ -39,7 +43,9 @@ export default function NavBar() {
             />
           </div>
 
+
           {/* Enlaces principales */}
+
           <Link href="/" className="hover:text-blue-400 transition-colors flex items-center gap-2">
             🏠 {isOpen && 'Inicio'}
           </Link>
@@ -95,6 +101,7 @@ export default function NavBar() {
                     Coleccionables
                   </button>
                 </Link>
+
               </div>
             )}
           </div>
@@ -102,7 +109,9 @@ export default function NavBar() {
 
         {/* Centro de Ayuda */}
         <div className="mt-auto p-4 flex items-center justify-center">
+
           <Link href="/help-center" className="hover:text-blue-400 transition-colors flex items-center gap-2">
+
             <FaPhone className="text-xl" />
             {isOpen && 'Centro de Ayuda'}
           </Link>

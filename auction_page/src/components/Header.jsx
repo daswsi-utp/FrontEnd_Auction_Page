@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -20,6 +21,7 @@ export default function Header() {
   };
 
   return (
+
     <header className="bg-gray-800 text-white py-4 px-6 shadow-md sticky top-0 z-50">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Subastas</h1>
@@ -50,27 +52,28 @@ export default function Header() {
                 {user.name} ⬇
               </button>
 
-              {dropdownOpen && (
-                <div className="absolute mt-2 w-48 bg-white text-black rounded shadow-lg right-0">
-                  <Link href="/profile">
-                    <span
-                      onClick={() => setDropdownOpen(false)}
-                      className="block w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                    >
-                      Mi cuenta
-                    </span>
-                  </Link>
+            {dropdownOpen && (
+              <div className="absolute mt-2 w-48 bg-white text-black rounded shadow-lg right-0">
+                {/* Enlace actualizado a la ruta '/profile' */}
+                <Link href="/profile">
                   <span
-                    onClick={handleLogout}
+                    onClick={() => setDropdownOpen(false)}
                     className="block w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
                   >
-                    Log Out
+                    Mi cuenta
                   </span>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
+                </Link>
+                <span
+                  onClick={handleLogout}
+                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                >
+                  Log Out
+                </span>
+              </div>
+            )}
+          </div>
+        )}
+
       </div>
     </header>
   );

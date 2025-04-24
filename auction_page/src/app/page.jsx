@@ -3,9 +3,10 @@ import Link from 'next/link';
 
 export default function HomePage() {
   const productos = [
-    { id: 1, nombre: 'Reloj antiguo', img: '/img/imagen1.jpg' },
-    { id: 2, nombre: 'Obra de arte', img: '/img/imagen2.jpg' },
-    { id: 3, nombre: 'Cámara vintage', img: '/img/imagen3.jpg' },
+    { id: 1, nombre: 'Reloj antiguo', img: '/img/imagen1.jpg', ruta: '/SalePage' },
+    { id: 2, nombre: 'Obra de arte', img: '/img/imagen2.jpg', ruta: '/SalePage' },
+    { id: 3, nombre: 'Cámara vintage', img: '/img/imagen3.jpg', ruta: '/SalePage' },
+
   ];
 
   return (

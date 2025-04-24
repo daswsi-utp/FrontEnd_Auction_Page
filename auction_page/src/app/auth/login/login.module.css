@@ -1,5 +1,4 @@
 /* src/app/auth/login/login.module.css */
-
 .loginContainer {
   display: flex;
   justify-content: center;
@@ -195,4 +194,6 @@
   .loginButton {
     padding: 12px;
   }
+
 }
+
