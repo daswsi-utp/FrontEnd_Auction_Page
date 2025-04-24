@@ -44,7 +44,7 @@ body {
   color: #ffffff;
 }
 
-/* Contenido principal */
+
 .dashboard {
   margin-left: 1rem;
   padding: 30px;
@@ -52,7 +52,7 @@ body {
   width: 100%;
 }
 
-/* Subasta principal */
+
 .subasta-principal {
   display: flex;
   background: white;
@@ -151,7 +151,7 @@ body {
   border-bottom: 1px solid #eee;
 }
 
-/* Otras subastas */
+
 .otras-subastas h2 {
   font-size: 22px;
   margin-bottom: 20px;
