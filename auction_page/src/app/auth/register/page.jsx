@@ -13,7 +13,7 @@ function UserRegister() {
                 <label htmlFor="confirmPassword" className="text-slate-500 mb-2 block text-sm">Confirm Password:</label>
                 <input type="confirmPassword" className="p-3 rounded block mb-2 bg-slate-900 text-slate-300"/>
                 <button className="w-full bg-blue-500 text-white p-3 rounded-lg mt-3">
-                SING UP
+                    REGISTRAR
                 </button>
             </form>
         </div>
