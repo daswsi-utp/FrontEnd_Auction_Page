@@ -1,199 +1,260 @@
-/* src/app/auth/login/login.module.css */
 .loginContainer {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background: linear-gradient(45deg, #6a11cb, #2575fc);
-}
-
-.loginBox {
-  background-color: white;
-  padding: 30px;
-  border-radius: 10px;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-.icon {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.icon img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.title {
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: #333;
-  font-weight: 600;
-}
-
-.inputGroup {
-  margin-bottom: 20px;
-  text-align: left;
+  min-height: 100vh;
+  background: url('/img/subasta.jpg') no-repeat center center;
+  background-size: cover;
   position: relative;
+  font-family: 'Montserrat', sans-serif;
+  padding: 20px;
 }
 
-.inputGroup label {
-  display: block;
-  margin-bottom: 5px;
-  font-size: 14px;
-  color: #333;
-}
-
-.inputGroup input {
-  width: 100%;
-  padding: 12px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-top: 5px;
-}
-
-.passwordWrapper {
-  position: relative;
-}
-
-.showPassword {
+.backgroundOverlay {
   position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  font-size: 18px;
-  color: #2575fc;
-}
-
-.inputGroup input:focus {
-  border-color: #2575fc;
-  outline: none;
-  box-shadow: 0 0 5px rgba(37, 117, 252, 0.4);
-}
-
-.rememberMe {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  margin-bottom: 20px;
-}
-
-.rememberMe input {
-  margin-right: 5px;
-}
-
-.links {
-  margin-bottom: 20px;
-}
-
-.forgotPassword {
-  color: #2575fc;
-  text-decoration: none;
-  font-size: 12px;
-  cursor: pointer;
-}
-
-.forgotPassword:hover {
-  text-decoration: underline;
-}
-
-.loginButton {
-  width: 100%;
-  padding: 15px;
-  background-color: #2575fc;
-  color: white;
-  font-size: 16px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.loginButton:hover {
-  background-color: #1e65d8;
-}
-
-/* Modal */
-.modalOverlay {
-  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(3px);
 }
 
-.modalContent {
-  background-color: white;
-  padding: 30px;
-  border-radius: 10px;
-  width: 90%;
-  max-width: 400px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.loginCard {
+  position: relative;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 450px;
+  padding: 40px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+}
+
+.loginCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(90deg, #e63946, #f4a261, #e9c46a);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.logoContainer {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 15px;
+}
+
+.logoImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.gavelIcon {
+  position: absolute;
+  bottom: -10px;
+  right: -10px;
+  background: #e63946;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  border: 3px solid white;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.title {
+  font-size: 28px;
+  color: #333;
+  margin: 0 0 5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+  font-weight: 500;
+}
+
+.form {
+  margin-top: 30px;
+}
+
+.inputContainer {
+  position: relative;
+  margin-bottom: 25px;
+}
+
+.inputContainer label {
+  position: absolute;
+  top: 15px;
+  left: 45px;
+  color: #777;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  background: transparent;
+}
+
+.inputContainer input {
+  width: 100%;
+  padding: 15px 15px 15px 45px;
+  border: 2px solid #eee;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.inputContainer input:focus {
+  border-color: #e63946;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.1);
+}
+
+.inputContainer input:focus + label,
+.inputContainer input:not(:placeholder-shown) + label {
+  top: -10px;
+  left: 40px;
+  font-size: 12px;
+  color: #e63946;
+  background: white;
+  padding: 0 5px;
+  font-weight: 600;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 15px;
+  top: 15px;
+  font-size: 18px;
+  color: #777;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #e63946, #d62839);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  box-shadow: 0 4px 15px rgba(230, 57, 70, 0.4);
+}
+
+.submitButton:hover {
+  background: linear-gradient(135deg, #d62839, #c1121f);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(198, 40, 57, 0.5);
+}
+
+.submitButton:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.buttonIcon {
+  font-size: 18px;
+}
+
+.spinner {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+}
+
+.footer {
+  margin-top: 25px;
   text-align: center;
 }
 
-.modalContent input {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+.link {
+  color: #e63946;
+  font-size: 14px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s;
 }
 
-.modalButtons {
-  margin-top: 20px;
-  display: flex;
-  justify-content: space-between;
+.link:hover {
+  text-decoration: underline;
 }
 
-.modalButtons button {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+.registerText {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #666;
 }
 
-.modalButtons button:first-child {
-  background-color: #2575fc;
-  color: white;
+.registerLink {
+  color: #e63946;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s;
 }
 
-.modalButtons button:last-child {
-  background-color: #ccc;
-  color: #333;
+.registerLink:hover {
+  text-decoration: underline;
 }
 
-/* Responsivo */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive */
 @media (max-width: 480px) {
-  .loginBox {
-    width: 90%;
-    padding: 20px;
+  .loginCard {
+    padding: 30px 20px;
   }
-
+  
   .title {
-    font-size: 20px;
+    font-size: 24px;
   }
-
-  .inputGroup input {
-    padding: 10px;
+  
+  .logoContainer {
+    width: 80px;
+    height: 80px;
   }
-
-  .loginButton {
-    padding: 12px;
+  
+  .gavelIcon {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
   }
-
 }
-
