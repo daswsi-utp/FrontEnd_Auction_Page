@@ -1,129 +1,107 @@
 'use client';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-import { useState } from 'react';
-import styles from './bank.module.css';
-import Link from 'next/link';
-
-function BankForm() {
-  const [formData, setFormData] = useState({
-    bank: '',
+export default function BankAccount() {
+  const router = useRouter();
+  const [bankData, setBankData] = useState({
+    bankName: '',
     accountNumber: '',
-    accountType: '',
-    accountHolder: '',
-    cci: ''
+    accountType: 'checking',
+    currency: 'USD'
   });
+  const [isLoading, setIsLoading] = useState(true);
 
-  const [message, setMessage] = useState('');
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('auctionUser'));
+    if (!user) {
+      router.push('/auth/login');
+      return;
+    }
+    
+    // Simular carga de datos bancarios
+    const storedData = localStorage.getItem(`bankData_${user.id}`);
+    if (storedData) {
+      setBankData(JSON.parse(storedData));
+    }
+    setIsLoading(false);
+  }, [router]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const { bank, accountNumber, accountType, accountHolder } = formData;
-
-    if (!bank || !accountNumber || !accountType || !accountHolder) {
-      alert('Por favor, complete todos los campos requeridos.');
-      return;
-    }
-
-    const savedAccounts = JSON.parse(localStorage.getItem('bankAccounts')) || [];
-    savedAccounts.push(formData);
-    localStorage.setItem('bankAccounts', JSON.stringify(savedAccounts));
-
-    setMessage('✅ Cuenta bancaria registrada exitosamente!');
-    setFormData({
-      bank: '',
-      accountNumber: '',
-      accountType: '',
-      accountHolder: '',
-      cci: ''
-    });
-
-    setTimeout(() => setMessage(''), 3000);
+    
+    const user = JSON.parse(localStorage.getItem('auctionUser'));
+    localStorage.setItem(`bankData_${user.id}`, JSON.stringify(bankData));
+    alert('Datos bancarios guardados');
   };
 
+  if (isLoading) return <div>Cargando...</div>;
+
   return (
-    <div className={styles.container}>
-      <form className={styles.form} onSubmit={handleSubmit}>
-        <h2 className={styles.title}>Registro de Cuenta Bancaria</h2>
-
-        <div className={styles.inputBox}>
-          <label>Banco</label>
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-2xl font-bold mb-6">Cuenta Bancaria</h1>
+      
+      <form onSubmit={handleSubmit} className="max-w-xl space-y-4">
+        <div>
+          <label className="block mb-1 font-medium">Banco*</label>
           <input
             type="text"
-            name="bank"
-            value={formData.bank}
-            onChange={handleChange}
-            placeholder="Ingrese el nombre del banco"
+            value={bankData.bankName}
+            onChange={(e) => setBankData({...bankData, bankName: e.target.value})}
+            className="w-full px-3 py-2 border rounded"
             required
           />
         </div>
-
-        <div className={styles.inputBox}>
-          <label>Número de Cuenta</label>
+        
+        <div>
+          <label className="block mb-1 font-medium">Número de cuenta*</label>
           <input
             type="text"
-            name="accountNumber"
-            value={formData.accountNumber}
-            onChange={handleChange}
-            placeholder="Ej. 1234567890"
+            value={bankData.accountNumber}
+            onChange={(e) => setBankData({...bankData, accountNumber: e.target.value})}
+            className="w-full px-3 py-2 border rounded"
             required
           />
         </div>
-
-        <div className={styles.inputBox}>
-          <label>Tipo de Cuenta</label>
-          <input
-            type="text"
-            name="accountType"
-            value={formData.accountType}
-            onChange={handleChange}
-            placeholder="Ahorros o Corriente"
-            required
-          />
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block mb-1 font-medium">Tipo de cuenta*</label>
+            <select
+              value={bankData.accountType}
+              onChange={(e) => setBankData({...bankData, accountType: e.target.value})}
+              className="w-full px-3 py-2 border rounded"
+              required
+            >
+              <option value="checking">Cuenta corriente</option>
+              <option value="savings">Cuenta de ahorros</option>
+            </select>
+          </div>
+          
+          <div>
+            <label className="block mb-1 font-medium">Moneda*</label>
+            <select
+              value={bankData.currency}
+              onChange={(e) => setBankData({...bankData, currency: e.target.value})}
+              className="w-full px-3 py-2 border rounded"
+              required
+            >
+              <option value="USD">Dólares (USD)</option>
+              <option value="EUR">Euros (EUR)</option>
+              <option value="PEN">Soles (PEN)</option>
+            </select>
+          </div>
         </div>
-
-        <div className={styles.inputBox}>
-          <label>Titular de la Cuenta</label>
-          <input
-            type="text"
-            name="accountHolder"
-            value={formData.accountHolder}
-            onChange={handleChange}
-            placeholder="Nombre completo del titular"
-            required
-          />
+        
+        <div className="pt-4">
+          <button
+            type="submit"
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded font-medium"
+          >
+            Guardar datos bancarios
+          </button>
         </div>
-
-        <div className={styles.inputBox}>
-          <label>CCI (opcional)</label>
-          <input
-            type="text"
-            name="cci"
-            value={formData.cci}
-            onChange={handleChange}
-            placeholder="Código CCI"
-          />
-        </div>
-
-        <button type="submit" className={styles.button}>
-          Registrar Cuenta
-        </button>
-
-        {message && <p className={styles.success}>{message}</p>}
       </form>
-
-      {/* Botón para regresar a la cuenta */}
-      <div className={styles.returnButton}>
-        <Link href="/profile">
-          <button className={styles.button}>Regresar a Mi Cuenta</button>
-        </Link>
-      </div>
     </div>
   );
 }
-
-export default BankForm;
