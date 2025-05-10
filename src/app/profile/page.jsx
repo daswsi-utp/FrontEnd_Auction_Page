@@ -2,139 +2,196 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import styles from './profile.module.css';
 
-const UserProfile = () => {
-  const [user, setUser] = useState(null);
+const ProfilePage = () => {
   const router = useRouter();
+  const [user, setUser] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    dni: '',
+    birthDate: '',
+    address: '',
+    district: '',
+    province: '',
+    department: '',
+    role: '',
+    avatar: ''
+  });
 
   useEffect(() => {
-    // Simulación de carga de datos de usuario (puedes reemplazarlo con localStorage)
-    setUser({
-      name: 'John Doe',
-      role: 'Usuario',
-      email: 'johndoe@example.com',
-      joined: '2023-01-15',
-      auctionsCreated: 5,
-      bidsPlaced: 15,
-    });
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      const parsed = JSON.parse(storedUser);
+      setUser(parsed);
+      setFormData(parsed);
+    }
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem('user');
-    setUser(null);
-    router.push('/'); // Redirige al inicio
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  const handleChange = (e) => {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const fakeBids = [
-    { item: 'Reloj vintage', amount: '$120', date: '2025-04-20' },
-    { item: 'Laptop gamer', amount: '$750', date: '2025-04-19' },
-    { item: 'Bicicleta urbana', amount: '$200', date: '2025-04-18' },
-    { item: 'Smartphone nuevo', amount: '$500', date: '2025-04-17' },
-    { item: 'Cámara digital', amount: '$300', date: '2025-04-16' },
-  ];
+  const handleSave = () => {
+    localStorage.setItem('user', JSON.stringify(formData));
+    setUser(formData);
+    closeModal();
+  };
 
-  const fakeHistory = [
-    { item: 'Teclado mecánico', price: '$90', result: 'Ganada' },
-    { item: 'Silla ergonómica', price: '$150', result: 'Perdida' },
-    { item: 'Monitor 27"', price: '$250', result: 'Ganada' },
-    { item: 'Tablet', price: '$180', result: 'Perdida' },
-    { item: 'Auriculares inalámbricos', price: '$85', result: 'Ganada' },
-  ];
+  const handleBack = () => {
+    router.push('/');
+  };
 
-  if (!user) return <div className={styles.loading}>Cargando perfil...</div>;
+  if (!user) {
+    return (
+      <div className={styles.profileContainer}>
+        <p className="text-center text-gray-600 mt-20">Cargando perfil...</p>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.profileContainer}>
       <div className={styles.profileContent}>
         <div className={styles.profileCard}>
           <div className={styles.avatarSection}>
-            <img src="/img/avatar.png" alt="Avatar" className={styles.avatar} />
-            <h2>{user.name}</h2>
-            <p className={styles.role}>{user.role}</p>
+            <img
+              src={user.avatar || '/default-avatar.png'}
+              alt="Avatar"
+              className={styles.avatar}
+            />
+            <h2 className="text-2xl font-semibold text-gray-800">
+              {user.name} {user.lastName}
+            </h2>
+            <p className={styles.role}>Rol: {user.role || 'Usuario'}</p>
           </div>
 
           <div className={styles.infoSection}>
             <div className={styles.infoItem}>
-              <span className={styles.label}>Correo:</span>
+              <span className={styles.label}>Email:</span>
               <span>{user.email}</span>
             </div>
-
             <div className={styles.infoItem}>
-              <span className={styles.label}>Miembro desde:</span>
-              <span>{user.joined}</span>
+              <span className={styles.label}>Teléfono:</span>
+              <span>{user.phone || 'No registrado'}</span>
             </div>
-
-            <div className={styles.stats}>
-              <div className={styles.statBox}>
-                <h3>{user.auctionsCreated}</h3>
-                <p>Subastas creadas</p>
-              </div>
-              <div className={styles.statBox}>
-                <h3>{user.bidsPlaced}</h3>
-                <p>Ofertas realizadas</p>
-              </div>
+            <div className={styles.infoItem}>
+              <span className={styles.label}>DNI:</span>
+              <span>{user.dni || 'No registrado'}</span>
             </div>
-
-            <div className={styles.actions}>
-              <Link href="/profile/edit">
-                <button className={styles.button}>
-                  Editar perfil
-                </button>
-              </Link>
-              <button className={styles.button} onClick={handleLogout}>
-                Cerrar sesión
-              </button>
-              <Link href="/Bank">
-                <button className={styles.button}>
-                  Registrar cuenta
-                </button>
-              </Link>
+            <div className={styles.infoItem}>
+              <span className={styles.label}>Fecha de nacimiento:</span>
+              <span>{user.birthDate || 'No registrado'}</span>
+            </div>
+            <div className={styles.infoItem}>
+              <span className={styles.label}>Dirección:</span>
+              <span>
+                {user.address
+                  ? `${user.address}, ${user.district}, ${user.province}, ${user.department}`
+                  : 'No registrada'}
+              </span>
             </div>
           </div>
+
+          <button onClick={openModal} className={styles.button} aria-label="Editar perfil">
+            Editar Perfil
+          </button>
+
+          <button onClick={handleBack} className={`${styles.button} ${styles.backButton}`} aria-label="Volver atrás">
+            ← Volver
+          </button>
         </div>
 
         <div className={styles.dashboard}>
           <div className={styles.bidsSection}>
-            <h3>Últimas pujas</h3>
+            <h3>Mis Pujas Recientes</h3>
             <ul className={styles.bidList}>
-              {fakeBids.map((bid, index) => (
-                <li key={index}>
-                  <strong>{bid.item}</strong> - {bid.amount}
-                  <span className={styles.bidDate}>({bid.date})</span>
-                </li>
-              ))}
+              <li className="text-gray-500 italic">No hay pujas registradas aún.</li>
             </ul>
           </div>
 
           <div className={styles.historySection}>
-            <h3>Historial de subastas</h3>
+            <h3>Historial de Compras</h3>
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th>Artículo</th>
+                  <th>Producto</th>
                   <th>Precio</th>
-                  <th>Resultado</th>
+                  <th>Fecha</th>
+                  <th>Estado</th>
                 </tr>
               </thead>
               <tbody>
-                {fakeHistory.map((entry, index) => (
-                  <tr key={index}>
-                    <td>{entry.item}</td>
-                    <td>{entry.price}</td>
-                    <td className={entry.result === 'Ganada' ? styles.win : styles.lose}>
-                      {entry.result}
-                    </td>
-                  </tr>
-                ))}
+                <tr>
+                  <td colSpan="4" className="text-center text-gray-500 italic">
+                    No hay compras registradas aún.
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
         </div>
       </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className={styles.modalOverlay} onClick={closeModal} role="dialog" aria-modal="true">
+          <div
+            className={styles.modalContent}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-xl font-semibold mb-4 text-center text-blue-600">Editar Perfil</h3>
+
+            {[
+              ['name', 'Nombre'],
+              ['lastName', 'Apellido'],
+              ['email', 'Email'],
+              ['phone', 'Teléfono'],
+              ['dni', 'DNI'],
+              ['birthDate', 'Fecha de nacimiento'],
+              ['address', 'Dirección'],
+              ['district', 'Distrito'],
+              ['province', 'Provincia'],
+              ['department', 'Departamento'],
+            ].map(([field, label]) => (
+              <div key={field} className={styles.inputGroup}>
+                <label>{label}:</label>
+                <input
+                  type={field === 'birthDate' ? 'date' : 'text'}
+                  name={field}
+                  value={formData[field]}
+                  onChange={handleChange}
+                  placeholder={label}
+                />
+              </div>
+            ))}
+
+            <div className="flex justify-between mt-6">
+              <button
+                onClick={handleSave}
+                className={`${styles.button} ${styles.modalButton}`}
+              >
+                Guardar Cambios
+              </button>
+              <button
+                onClick={closeModal}
+                className={`${styles.button} ${styles.modalCancelButton}`}
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default UserProfile;
+export default ProfilePage;
