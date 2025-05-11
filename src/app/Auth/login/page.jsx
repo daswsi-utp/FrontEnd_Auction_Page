@@ -1,122 +1,93 @@
 'use client';
-
 import { useState } from 'react';
 import Link from 'next/link';
 import styles from './login.module.css';
 
-const LoginPage = () => {
-  const [username, setUsername] = useState('');
+export default function LoginPage() {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showModal, setShowModal] = useState(false); // Modal de recuperación
-  const [recoveryEmail, setRecoveryEmail] = useState('');
-  const [recoveryUsername, setRecoveryUsername] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Usuario:', username, 'Contraseña:', password, 'Recordarme:', rememberMe);
-  };
-
-  const handleRecovery = () => {
-    console.log('Recuperación para:', recoveryEmail, recoveryUsername);
-    setShowModal(false);
-    setRecoveryEmail('');
-    setRecoveryUsername('');
+    setIsLoading(true);
+    
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 800);
   };
 
   return (
     <div className={styles.loginContainer}>
-      <div className={styles.loginBox}>
-        <div className={styles.icon}>
-          <img src="/img/avatar.png" alt="login-img" />
+      <div className={styles.backgroundOverlay}></div>
+      
+      <div className={styles.loginCard}>
+        <div className={styles.header}>
+          <div className={styles.logoContainer}>
+            <img 
+              src="/img/subasta.jpg" 
+              alt="Subasta Logo" 
+              className={styles.logoImage}
+            />
+            <div className={styles.gavelIcon}>🔨</div>
+          </div>
+          <h1 className={styles.title}>Puja y Gana</h1>
+          <p className={styles.subtitle}>Accede a las mejores subastas online</p>
         </div>
-        <h1 className={styles.title}>Login</h1>
-        <form onSubmit={handleSubmit}>
-          <div className={styles.inputGroup}>
-            <label htmlFor="username">Username</label>
-            <input
-              type="text"
-              id="username"
-              placeholder="Enter your username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </div>
 
-          <div className={styles.inputGroup}>
-            <label htmlFor="password">Password</label>
-            <div className={styles.passwordWrapper}>
-              <input
-                type={showPassword ? 'text' : 'password'}
-                id="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <span
-                className={styles.showPassword}
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                👁️
-              </span>
-            </div>
-          </div>
-
-          <div className={styles.rememberMe}>
-            <input
-              type="checkbox"
-              id="rememberMe"
-              checked={rememberMe}
-              onChange={() => setRememberMe(!rememberMe)}
-            />
-            <label htmlFor="rememberMe">Remember me</label>
-          </div>
-
-          <div className={styles.links}>
-            <a href="#" onClick={() => setShowModal(true)} className={styles.forgotPassword}>
-              Forgot password?
-            </a>
-            <br />
-            <Link href="/Auth/register">
-              <span className={styles.forgotPassword}>¿Deseas registrarte?</span>
-            </Link>
-          </div>
-
-          <button type="submit" className={styles.loginButton}>
-            Login
-          </button>
-        </form>
-      </div>
-
-      {/* Modal de recuperación de contraseña */}
-      {showModal && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalContent}>
-            <h2>Recuperar contraseña</h2>
-            <input
-              type="text"
-              placeholder="Tu nombre de usuario"
-              value={recoveryUsername}
-              onChange={(e) => setRecoveryUsername(e.target.value)}
-            />
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <div className={styles.inputContainer}>
             <input
               type="email"
-              placeholder="Tu correo electrónico"
-              value={recoveryEmail}
-              onChange={(e) => setRecoveryEmail(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder=" "
+              required
             />
-            <div className={styles.modalButtons}>
-              <button onClick={handleRecovery}>Enviar</button>
-              <button onClick={() => setShowModal(false)}>Cancelar</button>
-            </div>
+            <label>Correo electrónico</label>
+            <span className={styles.inputIcon}>✉️</span>
           </div>
+
+          <div className={styles.inputContainer}>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder=" "
+              required
+            />
+            <label>Contraseña</label>
+            <span className={styles.inputIcon}>🔒</span>
+          </div>
+
+          <button 
+            type="submit" 
+            className={styles.submitButton}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <span className={styles.spinner}></span>
+            ) : (
+              <>
+                <span>ENTRAR</span>
+                <span className={styles.buttonIcon}>🏆</span>
+              </>
+            )}
+          </button>
+        </form>
+
+        <div className={styles.footer}>
+          <Link href="/auth/login/password" className={styles.link}>
+            ¿Olvidaste tu contraseña?
+          </Link>
+          <p className={styles.registerText}>
+            ¿Nuevo en la plataforma?{' '}
+            <Link href="/auth/register" className={styles.registerLink}>
+              Regístrate aquí
+            </Link>
+          </p>
         </div>
-      )}
+      </div>
     </div>
   );
-};
-
-export default LoginPage;
+}
