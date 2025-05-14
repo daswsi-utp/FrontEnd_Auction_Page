@@ -1,3 +1,4 @@
+//src\app\help-center\policies\page.jsx
 'use client';
 
 export default function PoliciesPage() {
