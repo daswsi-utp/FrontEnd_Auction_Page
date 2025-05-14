@@ -1,3 +1,4 @@
+//src\app\salePage\page.jsx
 import './style.css';
 
 export default function Home() {
