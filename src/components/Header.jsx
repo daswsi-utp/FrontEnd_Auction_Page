@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { FaBell, FaEnvelope, FaUserCircle, FaSignOutAlt } from 'react-icons/fa'
+import { FaBell, FaEnvelope, FaUserCircle, FaSignOutAlt, FaCreditCard } from 'react-icons/fa'
 
 export default function Header() {
   const [user, setUser] = useState(null)
@@ -25,6 +25,11 @@ export default function Header() {
   const handleProfileClick = () => {
     setProfileDropdown(false)
     router.push('/profile')
+  }
+
+  const handlePaymentMethodClick = () => {
+    setProfileDropdown(false)
+    router.push('/payment-methods')  // Redirige a la página de métodos de pago
   }
 
   return (
@@ -86,6 +91,14 @@ export default function Header() {
                         <span>Mi perfil</span>
                       </button>
                       
+                      <button
+                        onClick={handlePaymentMethodClick}
+                        className="flex items-center gap-2 w-full px-4 py-2 hover:bg-gray-700 transition-colors text-left"
+                      >
+                        <FaCreditCard className="text-gray-400" />
+                        <span>Método de pago</span>
+                      </button>
+
                       <button
                         onClick={handleLogout}
                         className="flex items-center gap-2 w-full px-4 py-2 hover:bg-gray-700 transition-colors text-left border-t border-gray-700"
