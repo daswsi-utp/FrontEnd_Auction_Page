@@ -1,0 +1,77 @@
+.container {
+  max-width: 1000px;
+  margin: 3rem auto;
+  padding: 0 1.5rem;
+  color: #1f2937;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 2rem;
+  color: #1d4ed8;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.icon {
+  font-size: 2.5rem;
+  color: #f59e0b;
+}
+
+.description {
+  font-size: 1.125rem;
+  color: #4b5563;
+  margin-bottom: 2.5rem;
+}
+
+.historyTable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.historyTable th,
+.historyTable td {
+  padding: 1rem;
+  text-align: left;
+}
+
+.historyTable th {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  font-size: 1rem;
+  font-weight: 600;
+  border-bottom: 2px solid #dbeafe;
+}
+
+.historyTable td {
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.95rem;
+  color: #374151;
+}
+
+.win {
+  color: #16a34a;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.lose {
+  color: #dc2626;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.statusIcon {
+  font-size: 1.1rem;
+}
