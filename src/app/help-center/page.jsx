@@ -1,4 +1,4 @@
-// /src/app/help-center/page.jsx
+//src\app\help-center\page.jsx
 import Link from 'next/link';
 import { FaQuestionCircle, FaFileContract } from 'react-icons/fa';
 
