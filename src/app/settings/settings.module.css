@@ -1,0 +1,118 @@
+/* General container for the settings page */
+.container {
+  max-width: 600px;
+  margin: 3rem auto;
+  padding: 0 1.5rem;
+  color: #1f2937;
+  background-color: #f9fafb;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 2.4rem;
+  color: #1d4ed8;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+}
+
+.icon {
+  font-size: 2.8rem;
+  color: #f59e0b;
+}
+
+.settingsForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 1rem;
+  color: #4b5563;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.inputIcon {
+  color: #1d4ed8;
+  margin-right: 8px;
+  font-size: 1.2rem;
+}
+
+.input {
+  padding: 12px 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+  background-color: #ffffff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input:focus {
+  border-color: #1d4ed8;
+  box-shadow: 0 0 8px rgba(29, 78, 216, 0.5);
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 500;
+  color: #4b5563;
+  font-size: 1rem;
+}
+
+.checkbox {
+  margin-right: 8px;
+}
+
+.btnPrimary {
+  background-color: #1d4ed8;
+  color: white;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  display: inline-block;
+  margin-top: 1.5rem;
+}
+
+.btnPrimary:hover {
+  background-color: #2563eb;
+  transform: translateY(-2px);
+}
+
+.btnPrimary:focus {
+  outline: none;
+  box-shadow: 0 0 8px rgba(29, 78, 216, 0.5);
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 2rem;
+  }
+  .container {
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  .settingsForm {
+    gap: 1rem;
+  }
+}
