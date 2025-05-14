@@ -1,7 +1,18 @@
 'use client'
 import Link from 'next/link'
 import { useState } from 'react'
-import { FaBars, FaTimes, FaHome, FaList, FaGavel, FaPlusCircle, FaHistory, FaHeart, FaCog, FaQuestionCircle } from 'react-icons/fa'
+import { 
+  FaBars, 
+  FaTimes, 
+  FaHome, 
+  FaList, 
+  FaGavel, 
+  FaPlusCircle, 
+  FaHistory, 
+  FaHeart, 
+  FaCog, 
+  FaQuestionCircle
+} from 'react-icons/fa'
 
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(true)
@@ -14,10 +25,10 @@ export default function NavBar() {
   const navItems = [
     { href: '/', icon: <FaHome />, text: 'Inicio' },
     { href: '/subastar', icon: <FaPlusCircle />, text: 'Subastar' },
-    { href: '/mis-subastas', icon: <FaGavel />, text: 'Mis subastas' },
-    { href: '/favoritos', icon: <FaHeart />, text: 'Favoritos' },
-    { href: '/historial', icon: <FaHistory />, text: 'Historial' },
-    { href: '/configuracion', icon: <FaCog />, text: 'Configuración' },
+    { href: '/my-auctions', icon: <FaGavel />, text: 'Mis subastas' },
+    { href: '/favorites', icon: <FaHeart />, text: 'Favoritos' },
+    { href: '/history', icon: <FaHistory />, text: 'Historial' },
+    { href: '/settings', icon: <FaCog />, text: 'Configuración' },
   ]
 
   return (
@@ -66,11 +77,11 @@ export default function NavBar() {
           
           {dropdownOpen && isOpen && (
             <div className="mt-2 ml-4 pl-4 border-l-2 border-gray-700">
-              <Link href="/categoria/arte" className="block p-2 hover:text-amber-400 transition-colors">Arte</Link>
-              <Link href="/categoria/joyas" className="block p-2 hover:text-amber-400 transition-colors">Joyas</Link>
-              <Link href="/categoria/coleccionables" className="block p-2 hover:text-amber-400 transition-colors">Coleccionables</Link>
-              <Link href="/categoria/electronica" className="block p-2 hover:text-amber-400 transition-colors">Electrónica</Link>
-              <Link href="/categoria/vehiculos" className="block p-2 hover:text-amber-400 transition-colors">Vehículos</Link>
+              <Link href="/category/art" className="block p-2 hover:text-amber-400 transition-colors">Arte</Link>
+              <Link href="/category/jewelry" className="block p-2 hover:text-amber-400 transition-colors">Joyas</Link>
+              <Link href="/category/collectibles" className="block p-2 hover:text-amber-400 transition-colors">Coleccionables</Link>
+              <Link href="/category/electronics" className="block p-2 hover:text-amber-400 transition-colors">Electrónica</Link>
+              <Link href="/category/vehicles" className="block p-2 hover:text-amber-400 transition-colors">Vehículos</Link>
             </div>
           )}
         </div>
@@ -78,7 +89,7 @@ export default function NavBar() {
 
       <div className="p-4 border-t border-gray-700">
         <Link 
-          href="/ayuda" 
+          href="/help" 
           className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 transition-colors"
         >
           <FaQuestionCircle className="text-xl" />
