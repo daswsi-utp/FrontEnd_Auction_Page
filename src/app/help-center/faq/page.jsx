@@ -1,3 +1,4 @@
+//src\app\help-center\faq\page.jsx
 'use client';
 
 import React from 'react';
