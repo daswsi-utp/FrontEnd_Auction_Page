@@ -1,45 +1,56 @@
-//src\app\auth\login\page.jsx
-'use client'
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import styles from './login.module.css'
+// src/app/auth/login/page.js
+
+'use client';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import styles from './login.module.css';
+import axiosUsuario from '../../lib/axiosUsuario';
+import { setToken } from '../../utils/auth'; // Asegúrate que esta ruta sea correcta
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
-  const router = useRouter()
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const router = useRouter();
 
-  const TEMP_CREDENTIALS = {
-    email: "usuario@demo.com",
-    password: "123456"
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError('')
+    try {
+      const response = await axiosUsuario.post('/auth/login', {
+        email,
+        password,
+      });
 
-    setTimeout(() => {
-      if (email === TEMP_CREDENTIALS.email && password === TEMP_CREDENTIALS.password) {
-        localStorage.setItem('auctionUser', JSON.stringify({ 
-          email, 
-          name: "Usuario Demo" 
-        }))
-        window.location.href = '/'
-      } else {
-        setError('Credenciales incorrectas. Usa: usuario@demo.com / 123456')
+      const token = response.headers['authorization']?.replace("Bearer ", "") || response.data?.token;
+
+      if (!token) {
+        throw new Error('No se recibió token de autenticación');
       }
-      setIsLoading(false)
-    }, 800)
-  }
+
+      // Guardar token y usuario
+      setToken(token);
+      localStorage.setItem('auctionUser', JSON.stringify(response.data.usuario));
+
+      // Redirigir al Home
+      router.push('/');
+    } catch (err) {
+      setError(
+        err.response?.data?.message ||
+        'Credenciales incorrectas. Inténtalo nuevamente.'
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className={styles.loginContainer}>
       <div className={styles.backgroundOverlay}></div>
-      
       <div className={styles.loginCard}>
         <div className={styles.header}>
           <div className={styles.logoContainer}>
@@ -53,7 +64,6 @@ export default function LoginPage() {
           <h1 className={styles.title}>Puja y Gana</h1>
           <p className={styles.subtitle}>Accede a las mejores subastas online</p>
         </div>
-
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.inputContainer}>
             <input
@@ -66,7 +76,6 @@ export default function LoginPage() {
             <label>Correo electrónico</label>
             <span className={styles.inputIcon}>✉️</span>
           </div>
-
           <div className={styles.inputContainer}>
             <input
               type="password"
@@ -78,15 +87,9 @@ export default function LoginPage() {
             <label>Contraseña</label>
             <span className={styles.inputIcon}>🔒</span>
           </div>
-
-          {error && (
-            <div className={styles.errorMessage}>
-              {error}
-            </div>
-          )}
-
-          <button 
-            type="submit" 
+          {error && <div className={styles.errorMessage}>{error}</div>}
+          <button
+            type="submit"
             className={styles.submitButton}
             disabled={isLoading}
           >
@@ -97,7 +100,6 @@ export default function LoginPage() {
             )}
           </button>
         </form>
-
         <div className={styles.footer}>
           <Link href="/auth/register" className={styles.registerLink}>
             ¿No tienes cuenta? Regístrate
@@ -105,5 +107,5 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
