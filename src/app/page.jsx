@@ -1,114 +1,121 @@
-'use client'
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Image from 'next/image'
-import Link from 'next/link'
-import { FaGavel, FaPlusCircle, FaSearch, FaHeart, FaStar } from 'react-icons/fa'
+'use client';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import Link from 'next/link';
+import { FaGavel, FaPlusCircle, FaSearch, FaHeart, FaStar } from 'react-icons/fa';
+
+// ✅ Ruta corregida a tu utilidad de autenticación
+import { isAuthenticated, getUserInfoFromToken } from './utils/auth';
 
 export default function HomePage() {
-  const router = useRouter()
-  const [productos, setProductos] = useState([])
-  const [searchTerm, setSearchTerm] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('Todas las categorías')
-  const [user, setUser] = useState(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const router = useRouter();
+  const [productos, setProductos] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('Todas las categorías');
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
+  // Productos simulados
   const mockProductos = [
-    { 
-      id: 1, 
-      nombre: 'Reloj antiguo Patek Philippe', 
-      img: '/img/imagen1.jpg', 
-      precio: '$1,200', 
-      precioReal: 1200,
-      tiempoRestante: '2h 45m', 
+    {
+      id: 1,
+      nombre: 'Reloj antiguo Patek Philippe',
+      img: '/img/imagen1.jpg',
+      precio: '$1,200',
+      tiempoRestante: '2h 45m',
       pujas: 12,
       categoria: 'Coleccionables',
       valoracion: 4.8
     },
-    { 
-      id: 2, 
-      nombre: 'Obra de arte "Atardecer"', 
-      img: '/img/imagen2.jpg', 
-      precio: '$3,500', 
-      precioReal: 3500,
-      tiempoRestante: '1d 3h', 
+    {
+      id: 2,
+      nombre: 'Obra de arte "Atardecer"',
+      img: '/img/imagen2.jpg',
+      precio: '$3,500',
+      tiempoRestante: '1d 3h',
       pujas: 8,
       categoria: 'Arte',
       valoracion: 4.9
     },
-    { 
-      id: 3, 
-      nombre: 'Cámara Leica vintage 1954', 
-      img: '/img/imagen3.jpg', 
-      precio: '$850', 
-      precioReal: 850,
-      tiempoRestante: '5h 30m', 
+    {
+      id: 3,
+      nombre: 'Cámara Leica vintage 1954',
+      img: '/img/imagen3.jpg',
+      precio: '$850',
+      tiempoRestante: '5h 30m',
       pujas: 21,
       categoria: 'Coleccionables',
       valoracion: 4.7
     },
-    { 
-      id: 4, 
-      nombre: 'Colección de monedas antiguas', 
-      img: '/img/monedas.jpg', 
-      precio: '$2,300', 
-      precioReal: 2300,
-      tiempoRestante: '3d 2h', 
+    {
+      id: 4,
+      nombre: 'Colección de monedas antiguas',
+      img: '/img/monedas.jpg',
+      precio: '$2,300',
+      tiempoRestante: '3d 2h',
       pujas: 5,
       categoria: 'Coleccionables',
       valoracion: 4.5
     },
-    { 
-      id: 5, 
-      nombre: 'Guitarra Fender Stratocaster', 
-      img: '/img/guitarra.jpg', 
-      precio: '$1,800', 
-      precioReal: 1800,
-      tiempoRestante: '12h 15m', 
+    {
+      id: 5,
+      nombre: 'Guitarra Fender Stratocaster',
+      img: '/img/guitarra.jpg',
+      precio: '$1,800',
+      tiempoRestante: '12h 15m',
       pujas: 14,
       categoria: 'Música',
       valoracion: 4.6
     },
-    { 
-      id: 6, 
-      nombre: 'Anillo de diamantes 2.5ct', 
-      img: '/img/anillo.jpg', 
-      precio: '$4,200', 
-      precioReal: 4200,
-      tiempoRestante: '6h 45m', 
+    {
+      id: 6,
+      nombre: 'Anillo de diamantes 2.5ct',
+      img: '/img/anillo.jpg',
+      precio: '$4,200',
+      tiempoRestante: '6h 45m',
       pujas: 9,
       categoria: 'Joyas',
       valoracion: 4.9
-    },
-  ]
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem('auctionUser')
-    if (!storedUser) {
-      router.push('/auth/login')
-    } else {
-      setUser(JSON.parse(storedUser))
-      setProductos(mockProductos)
-      setIsLoading(false)
     }
-  }, [router])
+  ];
+
+  // Verificar si el usuario está autenticado antes de mostrar HomePage
+  useEffect(() => {
+    const storedUser = localStorage.getItem('auctionUser');
+
+    if (!isAuthenticated() || !storedUser) {
+      router.push('/auth/login'); // Redirigir si no hay sesión
+    } else {
+      const userInfo = getUserInfoFromToken(); // Decodifica con jwt-decode
+      setUser({
+        nombre: JSON.parse(storedUser).nombre,
+        email: userInfo?.email
+      });
+      setProductos(mockProductos);
+      setIsLoading(false);
+    }
+  }, [router]);
 
   const handleProtectedAction = () => {
-    const user = localStorage.getItem('auctionUser')
-    if (!user) {
-      alert('Por favor inicia sesión primero')
-      router.push('/auth/login')
+    if (!isAuthenticated()) {
+      alert('Por favor inicia sesión primero');
+      router.push('/auth/login');
     }
-  }
+  };
 
+  // Filtrar productos por término y categoría
   const filteredProductos = mockProductos.filter(producto => {
-    const matchesSearch = producto.nombre.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = selectedCategory === 'Todas las categorías' || producto.categoria === selectedCategory
-    return matchesSearch && matchesCategory
-  })
+    const matchesSearch = producto.nombre.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory =
+      selectedCategory === 'Todas las categorías' || producto.categoria === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
 
-  const categories = ['Todas las categorías', ...new Set(mockProductos.map(p => p.categoria))]
+  // Obtener todas las categorías
+  const categories = ['Todas las categorías', ...new Set(mockProductos.map(p => p.categoria))];
 
+  // Mostrar pantalla de carga mientras se verifica la sesión
   if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-8 min-h-screen flex items-center justify-center">
@@ -117,7 +124,7 @@ export default function HomePage() {
           <p className="mt-4 text-gray-600">Cargando subastas...</p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -126,20 +133,19 @@ export default function HomePage() {
       <div className="bg-gradient-to-r from-amber-900 to-amber-700 rounded-xl p-6 mb-8 text-white relative overflow-hidden">
         <div className="relative z-10">
           <h1 className="text-3xl md:text-4xl font-bold mb-2">
-            {user ? `Bienvenido, ${user.name || 'Usuario'}` : 'Subastas Exclusivas'}
+            {user ? `Bienvenido, ${user.nombre}` : 'Subastas Exclusivas'}
           </h1>
           <p className="mb-4 max-w-2xl">Descubre objetos únicos y participa en emocionantes pujas</p>
-          
           {user ? (
             <div className="flex gap-3">
-              <Link 
-                href="/subastar" 
+              <Link
+                href="/subastar"
                 className="inline-flex items-center gap-2 bg-white text-amber-800 px-6 py-3 rounded-lg font-medium hover:bg-amber-100 transition-colors"
               >
                 <FaPlusCircle /> Subastar un objeto
               </Link>
-              <Link 
-                href="/mis-subastas" 
+              <Link
+                href="/mis-subastas"
                 className="inline-flex items-center gap-2 bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-medium hover:bg-white hover:text-amber-800 transition-colors"
               >
                 <FaGavel /> Mis subastas
@@ -177,20 +183,22 @@ export default function HomePage() {
           />
           <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
         </div>
-        <select 
+        <select
           className="bg-white border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
         >
           {categories.map(category => (
-            <option key={category} value={category}>{category}</option>
+            <option key={category} value={category}>
+              {category}
+            </option>
           ))}
         </select>
-        <button 
+        <button
           className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
           onClick={() => {
-            setSearchTerm('')
-            setSelectedCategory('Todas las categorías')
+            setSearchTerm('');
+            setSelectedCategory('Todas las categorías');
           }}
         >
           Limpiar
@@ -201,26 +209,25 @@ export default function HomePage() {
       <div className="mb-12">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 flex items-center gap-2">
-            <FaGavel className="text-amber-600" /> 
+            <FaGavel className="text-amber-600" />{' '}
             {selectedCategory === 'Todas las categorías' ? 'Subastas destacadas' : selectedCategory}
           </h2>
-          <Link 
-            href="/subastas" 
+          <Link
+            href="/subastas"
             className="text-amber-600 hover:text-amber-800 font-medium"
             onClick={handleProtectedAction}
           >
             Ver todas →
           </Link>
         </div>
-
         {filteredProductos.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-500 text-lg">No se encontraron subastas con los filtros seleccionados</p>
-            <button 
+            <button
               className="mt-4 text-amber-600 hover:text-amber-800 font-medium"
               onClick={() => {
-                setSearchTerm('')
-                setSelectedCategory('Todas las categorías')
+                setSearchTerm('');
+                setSelectedCategory('Todas las categorías');
               }}
             >
               Mostrar todas las subastas
@@ -229,10 +236,7 @@ export default function HomePage() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProductos.map((producto) => (
-              <div 
-                key={producto.id} 
-                className="group transition-all hover:-translate-y-1"
-              >
+              <div key={producto.id} className="group transition-all hover:-translate-y-1">
                 <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl border border-gray-200 relative">
                   <div className="relative h-60 w-full">
                     <Image
@@ -245,7 +249,7 @@ export default function HomePage() {
                     <div className="absolute top-2 right-2 bg-amber-600 text-white text-xs font-bold px-2 py-1 rounded">
                       {producto.tiempoRestante}
                     </div>
-                    <button 
+                    <button
                       className="absolute top-2 left-2 p-2 bg-white/80 rounded-full hover:bg-white transition-colors"
                       onClick={handleProtectedAction}
                     >
@@ -267,7 +271,7 @@ export default function HomePage() {
                       <span className="font-bold text-lg text-gray-900">{producto.precio}</span>
                       <span className="text-sm text-gray-500">{producto.pujas} pujas</span>
                     </div>
-                    <button 
+                    <button
                       className="mt-3 w-full bg-amber-100 hover:bg-amber-200 text-amber-800 py-2 rounded-lg font-medium text-sm transition-colors"
                       onClick={handleProtectedAction}
                     >
@@ -285,18 +289,20 @@ export default function HomePage() {
       <div className="mb-12">
         <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">Explora por categorías</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {categories.filter(c => c !== 'Todas las categorías').map(category => (
-            <button
-              key={category}
-              className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow text-center"
-              onClick={() => setSelectedCategory(category)}
-            >
-              <div className="w-12 h-12 mx-auto mb-2 bg-amber-100 rounded-full flex items-center justify-center text-amber-600">
-                <FaGavel />
-              </div>
-              <span className="font-medium">{category}</span>
-            </button>
-          ))}
+          {categories
+            .filter((c) => c !== 'Todas las categorías')
+            .map((category) => (
+              <button
+                key={category}
+                className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow text-center"
+                onClick={() => setSelectedCategory(category)}
+              >
+                <div className="w-12 h-12 mx-auto mb-2 bg-amber-100 rounded-full flex items-center justify-center text-amber-600">
+                  <FaGavel />
+                </div>
+                <span className="font-medium">{category}</span>
+              </button>
+            ))}
         </div>
       </div>
 
@@ -335,20 +341,16 @@ export default function HomePage() {
           <div className="bg-white p-6 rounded-xl shadow-md">
             <div className="flex items-center mb-4">
               <div className="w-12 h-12 rounded-full bg-gray-300 mr-4 overflow-hidden">
-                <Image 
-                  src="/img/user1.jpg" 
-                  alt="Usuario 1" 
-                  width={48}
-                  height={48}
-                  className="object-cover"
-                />
+                <Image src="/img/user1.jpg" alt="Usuario 1" width={48} height={48} className="object-cover" />
               </div>
               <div>
                 <h4 className="font-bold">María González</h4>
                 <p className="text-amber-600 text-sm">Coleccionista de arte</p>
               </div>
             </div>
-            <p className="text-gray-600 italic">"Encontré una obra de arte única que llevaba años buscando. El proceso de puja fue emocionante y la entrega super rápida."</p>
+            <p className="text-gray-600 italic">
+              "Encontré una obra de arte única que llevaba años buscando. El proceso de puja fue emocionante."
+            </p>
             <div className="flex mt-3">
               {[...Array(5)].map((_, i) => (
                 <FaStar key={i} className={`${i < 5 ? 'text-amber-400' : 'text-gray-300'} mr-1`} />
@@ -358,20 +360,16 @@ export default function HomePage() {
           <div className="bg-white p-6 rounded-xl shadow-md">
             <div className="flex items-center mb-4">
               <div className="w-12 h-12 rounded-full bg-gray-300 mr-4 overflow-hidden">
-                <Image 
-                  src="/img/user2.jpg" 
-                  alt="Usuario 2" 
-                  width={48}
-                  height={48}
-                  className="object-cover"
-                />
+                <Image src="/img/user2.jpg" alt="Usuario 2" width={48} height={48} className="object-cover" />
               </div>
               <div>
                 <h4 className="font-bold">Carlos Martínez</h4>
                 <p className="text-amber-600 text-sm">Coleccionista de relojes</p>
               </div>
             </div>
-            <p className="text-gray-600 italic">"Como coleccionista, valoro la autenticidad de los artículos. Esta plataforma ofrece certificados de autenticidad para cada pieza importante."</p>
+            <p className="text-gray-600 italic">
+              "Como coleccionista, valoro la autenticidad. Esta plataforma ofrece certificados de autenticidad."
+            </p>
             <div className="flex mt-3">
               {[...Array(5)].map((_, i) => (
                 <FaStar key={i} className={`${i < 4 ? 'text-amber-400' : 'text-gray-300'} mr-1`} />
@@ -381,5 +379,5 @@ export default function HomePage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
