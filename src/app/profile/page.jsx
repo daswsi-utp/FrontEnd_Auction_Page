@@ -1,9 +1,7 @@
-//src\app\profile\page.jsx
-'use client'
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-
+'use client';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { 
   FaUser, 
   FaHistory, 
@@ -14,43 +12,50 @@ import {
   FaTrophy,
   FaMoneyBillWave,
   FaCog
-} from 'react-icons/fa'
-import Image from 'next/image'
+} from 'react-icons/fa';
+import Image from 'next/image';
+import axiosUsuario from '@/lib/axiosUsuario';
+import { removeToken } from '@/utils/auth';
 
 export default function ProfilePage() {
-  const [user, setUser] = useState(null)
-  const [activeTab, setActiveTab] = useState('auctions')
+  const [user, setUser] = useState(null);
+  const [activeTab, setActiveTab] = useState('auctions');
   const [stats, setStats] = useState({
     auctions: 0,
     bids: 0,
     won: 0,
     favorites: 0
-  })
-  const router = useRouter()
+  });
+  const router = useRouter();
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('auctionUser')
-    if (!storedUser) {
-      alert('Debes iniciar sesión para ver tu perfil')
-      router.push('/auth/login')
-    } else {
-      const userData = JSON.parse(storedUser)
-      setUser(userData)
-      
-      // Simular datos de estadísticas
-      setStats({
-        auctions: 5,
-        bids: 23,
-        won: 3,
-        favorites: 7
-      })
-    }
-  }, [])
+    const fetchUserData = async () => {
+      try {
+        const response = await axiosUsuario.get('/user/profile');
+        setUser(response.data);
+        
+        // Simular datos de estadísticas
+        setStats({
+          auctions: response.data.auctions || 0,
+          bids: response.data.bids || 0,
+          won: response.data.wonAuctions || 0,
+          favorites: response.data.favorites || 0
+        });
+      } catch (error) {
+        if (error.response?.status === 401) {
+          removeToken();
+          router.push('/auth/login');
+        }
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('auctionUser')
-    router.push('/auth/login')
-  }
+    removeToken();
+    router.push('/auth/login');
+  };
 
   if (!user) {
     return (
@@ -60,7 +65,7 @@ export default function ProfilePage() {
           <p className="text-lg text-gray-600">Cargando tu perfil...</p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -75,7 +80,7 @@ export default function ProfilePage() {
                 {user.avatar ? (
                   <Image 
                     src={user.avatar} 
-                    alt={user.name} 
+                    alt={user.nombre} 
                     width={128}
                     height={128}
                     className="object-cover"
@@ -86,7 +91,7 @@ export default function ProfilePage() {
               </div>
               <div>
                 <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
-                  {user.name || 'Usuario'}
+                  {user.nombre || 'Usuario'}
                 </h1>
                 <p className="text-gray-600">{user.email}</p>
                 <p className="text-sm text-gray-500 mt-1">
@@ -325,5 +330,5 @@ export default function ProfilePage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
