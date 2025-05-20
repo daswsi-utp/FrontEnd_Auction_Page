@@ -1,11 +1,10 @@
-//src\app\auth\register\page.jsx
 'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { FaUserPlus, FaIdCard, FaPhone, FaEnvelope, FaLock, FaMapMarkerAlt } from 'react-icons/fa';
+import axiosUsuario from '../../lib/axiosUsuario';
 
-// Datos de ejemplo para ubicaciones (deberías reemplazarlos con datos reales)
 const countries = [
   { code: 'PE', name: 'Perú' },
   { code: 'AR', name: 'Argentina' },
@@ -31,16 +30,7 @@ const peruLocations = {
   ]
 };
 
-const otherCountryLocations = {
-  departments: [
-    { name: 'Buenos Aires', provinces: [
-      { name: 'Capital Federal', districts: ['Palermo', 'Recoleta', 'San Telmo'] }
-    ]}
-  ]
-};
-
 export default function RegisterPage() {
-  const router = useRouter();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -63,13 +53,13 @@ export default function RegisterPage() {
   const [districts, setDistricts] = useState([]);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
 
-  // Cargar ubicaciones según el país seleccionado
   useEffect(() => {
     if (formData.address.country === 'PE') {
       setDepartments(peruLocations.departments);
     } else {
-      setDepartments(otherCountryLocations.departments);
+      setDepartments([]);
     }
     setFormData(prev => ({
       ...prev,
@@ -82,7 +72,6 @@ export default function RegisterPage() {
     }));
   }, [formData.address.country]);
 
-  // Cargar provincias cuando se selecciona un departamento
   useEffect(() => {
     if (formData.address.department) {
       const selectedDept = departments.find(d => d.name === formData.address.department);
@@ -98,7 +87,6 @@ export default function RegisterPage() {
     }
   }, [formData.address.department, departments]);
 
-  // Cargar distritos cuando se selecciona una provincia
   useEffect(() => {
     if (formData.address.province && formData.address.department) {
       const selectedDept = departments.find(d => d.name === formData.address.department);
@@ -142,22 +130,30 @@ export default function RegisterPage() {
     
     try {
       const userData = {
-        id: Date.now(),
-        ...formData,
-        role: 'user',
-        balance: 0,
-        createdAt: new Date().toISOString()
+        nombre: formData.name,
+        email: formData.email,
+        passwordHash: formData.password,
+        dni: formData.dni,
+        telefono: formData.phone,
+        direcciones: [{
+          calle: formData.address.street,
+          pais: formData.address.country,
+          departamento: formData.address.department,
+          provincia: formData.address.province,
+          distrito: formData.address.district,
+          codigoPostal: formData.address.postalCode
+        }]
       };
 
-      const users = JSON.parse(localStorage.getItem('auctionUsers') || '[]');
-      users.push(userData);
-      localStorage.setItem('auctionUsers', JSON.stringify(users));
-      localStorage.setItem('auctionUser', JSON.stringify(userData));
+      const response = await axiosUsuario.post('/auth/register', userData);
       
-      router.push('/');
+      if (response.status === 200) {
+        router.push('/auth/login?registered=true');
+      }
     } catch (error) {
-      console.error('Error en registro:', error);
-      setErrors({ general: 'Error al registrar. Intente nuevamente.' });
+      setErrors({ 
+        general: error.response?.data?.error || 'Error al registrar. Intente nuevamente.' 
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -304,7 +300,6 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            {/* Sección de Dirección */}
             <div className="pt-4 border-t border-gray-200">
               <h3 className="text-lg font-medium text-gray-900 flex items-center gap-2 mb-4">
                 <FaMapMarkerAlt className="text-indigo-600" />
