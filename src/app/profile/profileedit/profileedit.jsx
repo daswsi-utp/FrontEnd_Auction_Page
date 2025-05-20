@@ -1,158 +1,176 @@
-//src\app\profile\profileedit\profileedit.jsx
-'use client'
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { FaUser, FaSave, FaTimes, FaCamera, FaLock } from 'react-icons/fa'
-import Image from 'next/image'
+'use client';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { FaUser, FaSave, FaTimes, FaCamera, FaLock } from 'react-icons/fa';
+import Image from 'next/image';
+import axiosUsuario from '../../lib/axiosUsuario';
+import { removeToken } from '../../utils/auth';
 
 export default function ProfileEditPage() {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(null);
   const [formData, setFormData] = useState({
-    name: '',
+    nombre: '',
     email: '',
-    phone: '',
-    address: '',
+    telefono: '',
+    direccion: '',
     avatar: null,
     previewAvatar: ''
-  })
+  });
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
     newPassword: '',
     confirmPassword: ''
-  })
-  const [activeTab, setActiveTab] = useState('profile')
-  const [isLoading, setIsLoading] = useState(true)
-  const [errors, setErrors] = useState({})
-  const router = useRouter()
+  });
+  const [activeTab, setActiveTab] = useState('profile');
+  const [isLoading, setIsLoading] = useState(true);
+  const [errors, setErrors] = useState({});
+  const router = useRouter();
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('auctionUser')
-    if (!storedUser) {
-      alert('Debes iniciar sesión para editar tu perfil')
-      router.push('/auth/login')
-    } else {
-      const userData = JSON.parse(storedUser)
-      setUser(userData)
-      setFormData({
-        name: userData.name || '',
-        email: userData.email || '',
-        phone: userData.phone || '',
-        address: userData.address || '',
-        avatar: null,
-        previewAvatar: userData.avatar || ''
-      })
-      setIsLoading(false)
-    }
-  }, [])
+    const fetchUserData = async () => {
+      try {
+        const response = await axiosUsuario.get('/user/profile');
+        setUser(response.data);
+        setFormData({
+          nombre: response.data.nombre || '',
+          email: response.data.email || '',
+          telefono: response.data.telefono || '',
+          direccion: response.data.direccion || '',
+          avatar: null,
+          previewAvatar: response.data.avatar || ''
+        });
+        setIsLoading(false);
+      } catch (error) {
+        if (error.response?.status === 401) {
+          removeToken();
+          router.push('/auth/login');
+        }
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
-    }))
-  }
+    }));
+  };
 
   const handlePasswordChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setPasswordData(prev => ({
       ...prev,
       [name]: value
-    }))
-  }
+    }));
+  };
 
   const handleAvatarChange = (e) => {
-    const file = e.target.files[0]
+    const file = e.target.files[0];
     if (file) {
       setFormData(prev => ({
         ...prev,
         avatar: file,
         previewAvatar: URL.createObjectURL(file)
-      }))
+      }));
     }
-  }
+  };
 
   const validateForm = () => {
-    const newErrors = {}
+    const newErrors = {};
     
-    if (!formData.name.trim()) {
-      newErrors.name = 'El nombre es requerido'
-    }
-    
-    if (!formData.email.trim()) {
-      newErrors.email = 'El email es requerido'
-    } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
-      newErrors.email = 'Email no válido'
-    }
-    
-    if (activeTab === 'password') {
+    if (activeTab === 'profile') {
+      if (!formData.nombre.trim()) {
+        newErrors.nombre = 'El nombre es requerido';
+      }
+      
+      if (!formData.email.trim()) {
+        newErrors.email = 'El email es requerido';
+      } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+        newErrors.email = 'Email no válido';
+      }
+    } else {
       if (!passwordData.currentPassword) {
-        newErrors.currentPassword = 'La contraseña actual es requerida'
+        newErrors.currentPassword = 'La contraseña actual es requerida';
       }
       
       if (!passwordData.newPassword) {
-        newErrors.newPassword = 'La nueva contraseña es requerida'
+        newErrors.newPassword = 'La nueva contraseña es requerida';
       } else if (passwordData.newPassword.length < 6) {
-        newErrors.newPassword = 'Mínimo 6 caracteres'
+        newErrors.newPassword = 'Mínimo 6 caracteres';
       }
       
       if (passwordData.newPassword !== passwordData.confirmPassword) {
-        newErrors.confirmPassword = 'Las contraseñas no coinciden'
+        newErrors.confirmPassword = 'Las contraseñas no coinciden';
       }
     }
     
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     
-    if (!validateForm()) {
-      return
-    }
+    if (!validateForm()) return;
     
-    setIsLoading(true)
+    setIsLoading(true);
     
-    // Simular llamada API
-    setTimeout(() => {
-      const updatedUser = {
-        ...user,
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        address: formData.address,
-        avatar: formData.previewAvatar,
-        joinDate: user.joinDate || new Date().toISOString()
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append('nombre', formData.nombre);
+      formDataToSend.append('email', formData.email);
+      formDataToSend.append('telefono', formData.telefono);
+      formDataToSend.append('direccion', formData.direccion);
+      if (formData.avatar) {
+        formDataToSend.append('avatar', formData.avatar);
       }
-      
-      localStorage.setItem('auctionUser', JSON.stringify(updatedUser))
-      
-      alert('Perfil actualizado correctamente')
-      router.push('/profile')
-    }, 1000)
-  }
 
-  const handlePasswordSubmit = (e) => {
-    e.preventDefault()
-    
-    if (!validateForm()) {
-      return
+      const response = await axiosUsuario.put('/user/profile', formDataToSend, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      
+      if (response.status === 200) {
+        router.push('/profile');
+      }
+    } catch (error) {
+      setErrors({ 
+        general: error.response?.data?.error || 'Error al actualizar perfil.' 
+      });
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const handlePasswordSubmit = async (e) => {
+    e.preventDefault();
     
-    setIsLoading(true)
+    if (!validateForm()) return;
     
-    // Simular cambio de contraseña
-    setTimeout(() => {
-      alert('Contraseña actualizada correctamente')
-      setPasswordData({
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: ''
-      })
-      setIsLoading(false)
-    }, 1000)
-  }
+    setIsLoading(true);
+    
+    try {
+      const response = await axiosUsuario.put('/user/password', passwordData);
+      
+      if (response.status === 200) {
+        setPasswordData({
+          currentPassword: '',
+          newPassword: '',
+          confirmPassword: ''
+        });
+      }
+    } catch (error) {
+      setErrors({ 
+        general: error.response?.data?.error || 'Error al cambiar contraseña.' 
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   if (!user || isLoading) {
     return (
@@ -162,7 +180,7 @@ export default function ProfileEditPage() {
           <p className="text-lg text-gray-600">Cargando tu perfil...</p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -211,6 +229,12 @@ export default function ProfileEditPage() {
 
         {/* Contenido dinámico */}
         <div className="flex-1 bg-white rounded-lg shadow-md overflow-hidden p-6">
+          {errors.general && (
+            <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">
+              {errors.general}
+            </div>
+          )}
+
           {activeTab === 'profile' && (
             <form onSubmit={handleSubmit}>
               <div className="flex flex-col md:flex-row gap-8 mb-8">
@@ -249,14 +273,14 @@ export default function ProfileEditPage() {
                     <label className="block text-gray-700 mb-2">Nombre completo</label>
                     <input
                       type="text"
-                      name="name"
-                      value={formData.name}
+                      name="nombre"
+                      value={formData.nombre}
                       onChange={handleInputChange}
                       className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 ${
-                        errors.name ? 'border-red-500' : 'border-gray-300'
+                        errors.nombre ? 'border-red-500' : 'border-gray-300'
                       }`}
                     />
-                    {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+                    {errors.nombre && <p className="text-red-500 text-sm mt-1">{errors.nombre}</p>}
                   </div>
 
                   <div>
@@ -277,8 +301,8 @@ export default function ProfileEditPage() {
                     <label className="block text-gray-700 mb-2">Teléfono</label>
                     <input
                       type="tel"
-                      name="phone"
-                      value={formData.phone}
+                      name="telefono"
+                      value={formData.telefono}
                       onChange={handleInputChange}
                       className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                     />
@@ -287,8 +311,8 @@ export default function ProfileEditPage() {
                   <div>
                     <label className="block text-gray-700 mb-2">Dirección</label>
                     <textarea
-                      name="address"
-                      value={formData.address}
+                      name="direccion"
+                      value={formData.direccion}
                       onChange={handleInputChange}
                       rows="3"
                       className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
@@ -387,5 +411,5 @@ export default function ProfileEditPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
