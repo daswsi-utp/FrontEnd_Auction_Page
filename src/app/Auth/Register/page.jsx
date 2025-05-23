@@ -47,6 +47,7 @@ export default function RegisterPage() {
       postalCode: ''
     }
   });
+
   const [departments, setDepartments] = useState([]);
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
@@ -54,7 +55,6 @@ export default function RegisterPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
-  // Cargar departamentos cuando se selecciona Perú
   useEffect(() => {
     if (formData.address.country === 'PE') {
       setDepartments(peruLocations.departments);
@@ -72,7 +72,6 @@ export default function RegisterPage() {
     }));
   }, [formData.address.country]);
 
-  // Cargar provincias basado en departamento
   useEffect(() => {
     if (formData.address.department) {
       const selectedDept = departments.find(d => d.name === formData.address.department);
@@ -88,7 +87,6 @@ export default function RegisterPage() {
     }
   }, [formData.address.department, departments]);
 
-  // Cargar distritos basado en provincia
   useEffect(() => {
     if (formData.address.province && formData.address.department) {
       const selectedDept = departments.find(d => d.name === formData.address.department);
@@ -144,7 +142,6 @@ export default function RegisterPage() {
     e.preventDefault();
     if (!validateForm()) return;
     setIsSubmitting(true);
-
     try {
       const userData = {
         nombre: formData.name,
@@ -161,7 +158,6 @@ export default function RegisterPage() {
           codigoPostal: formData.address.postalCode
         }]
       };
-
       const response = await axiosUsuario.post('/auth/register', userData);
       if (response.status === 201 || response.status === 200) {
         router.push('/auth/login?registered=true');
