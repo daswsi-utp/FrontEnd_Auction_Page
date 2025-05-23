@@ -1,4 +1,3 @@
-// src/lib/axiosUsuario.js
 import axios from 'axios';
 
 const API_URL = 'http://localhost:8080'; // URL base del backend
