@@ -1,6 +1,6 @@
-// src/utils/auth.js
-export const setToken = (token) => {
+export const setToken = (token, user) => {
   localStorage.setItem('token', token);
+  localStorage.setItem('auctionUser', JSON.stringify(user));
 };
 
 export const getToken = () => {
@@ -19,7 +19,6 @@ export const isAuthenticated = () => {
 export const getUserInfoFromToken = () => {
   const token = getToken();
   if (!token) return null;
-
   try {
     const payload = JSON.parse(atob(token.split('.')[1])); // Decodifica JWT
     return payload;
