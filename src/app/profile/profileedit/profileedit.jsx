@@ -2,10 +2,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { FaUser, FaSave, FaTimes, FaCamera, FaLock } from 'react-icons/fa';
-import Image from 'next/image';
 import axiosUsuario from '../../lib/axiosUsuario';
-import { removeToken } from '../../utils/auth';
 
 export default function ProfileEditPage() {
   const [user, setUser] = useState(null);
@@ -42,7 +39,8 @@ export default function ProfileEditPage() {
         });
         setIsLoading(false);
       } catch (error) {
-        removeToken();
+        localStorage.removeItem('token');
+        localStorage.removeItem('auctionUser');
         router.push('/auth/login');
       }
     };
@@ -63,17 +61,6 @@ export default function ProfileEditPage() {
       ...prev,
       [name]: value
     }));
-  };
-
-  const handleAvatarChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setFormData(prev => ({
-        ...prev,
-        avatar: file,
-        previewAvatar: URL.createObjectURL(file)
-      }));
-    }
   };
 
   const validateForm = () => {
@@ -108,7 +95,6 @@ export default function ProfileEditPage() {
     e.preventDefault();
     if (!validateForm()) return;
     setIsLoading(true);
-
     try {
       const updateData = {
         nombre: formData.nombre,
@@ -123,7 +109,6 @@ export default function ProfileEditPage() {
           codigoPostal: "15074"
         }]
       };
-
       await axiosUsuario.put('/auth/update-profile', updateData);
       router.push('/profile');
     } catch (error) {
@@ -139,7 +124,6 @@ export default function ProfileEditPage() {
     e.preventDefault();
     if (!validateForm()) return;
     setIsLoading(true);
-
     try {
       await axiosUsuario.put('/auth/change-password', passwordData);
       setPasswordData({
