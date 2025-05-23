@@ -1,3 +1,4 @@
+// src/app/profile/page.js
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -14,8 +15,8 @@ import {
   FaCog
 } from 'react-icons/fa';
 import Image from 'next/image';
-import axiosUsuario from '@/lib/axiosUsuario';
-import { removeToken } from '@/utils/auth';
+import axiosUsuario from '../../lib/axiosUsuario';
+import { removeToken } from '../../utils/auth';
 
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
@@ -29,27 +30,22 @@ export default function ProfilePage() {
   const router = useRouter();
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchUserInfo = async () => {
       try {
-        const response = await axiosUsuario.get('/user/profile');
-        setUser(response.data);
-        
-        // Simular datos de estadísticas
+        const res = await axiosUsuario.get('/auth/user-info');
+        setUser(res.data);
         setStats({
-          auctions: response.data.auctions || 0,
-          bids: response.data.bids || 0,
-          won: response.data.wonAuctions || 0,
-          favorites: response.data.favorites || 0
+          auctions: res.data.auctions || 0,
+          bids: res.data.bids || 0,
+          won: res.data.wonAuctions || 0,
+          favorites: res.data.favorites || 0
         });
       } catch (error) {
-        if (error.response?.status === 401) {
-          removeToken();
-          router.push('/auth/login');
-        }
+        removeToken();
+        router.push('/auth/login');
       }
     };
-
-    fetchUserData();
+    fetchUserInfo();
   }, []);
 
   const handleLogout = () => {
@@ -77,17 +73,7 @@ export default function ProfilePage() {
           <div className="flex flex-col md:flex-row justify-between items-end md:items-center relative -top-16">
             <div className="flex items-center gap-4 mb-4 md:mb-0">
               <div className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-white bg-gray-200 flex items-center justify-center overflow-hidden shadow-lg">
-                {user.avatar ? (
-                  <Image 
-                    src={user.avatar} 
-                    alt={user.nombre} 
-                    width={128}
-                    height={128}
-                    className="object-cover"
-                  />
-                ) : (
-                  <FaUser className="text-4xl md:text-5xl text-gray-500" />
-                )}
+                <FaUser className="text-4xl md:text-5xl text-gray-500" />
               </div>
               <div>
                 <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
@@ -95,11 +81,10 @@ export default function ProfilePage() {
                 </h1>
                 <p className="text-gray-600">{user.email}</p>
                 <p className="text-sm text-gray-500 mt-1">
-                  Miembro desde {new Date(user.joinDate || Date.now()).toLocaleDateString()}
+                  Miembro desde {new Date().toLocaleDateString()}
                 </p>
               </div>
             </div>
-            
             <div className="flex gap-3">
               <Link 
                 href="/profile/profileedit"
@@ -131,7 +116,6 @@ export default function ProfilePage() {
             </div>
           </div>
         </div>
-        
         <div className="bg-white p-4 rounded-lg shadow-md border border-gray-100">
           <div className="flex items-center gap-3">
             <div className="bg-blue-100 p-3 rounded-full">
@@ -143,7 +127,6 @@ export default function ProfilePage() {
             </div>
           </div>
         </div>
-        
         <div className="bg-white p-4 rounded-lg shadow-md border border-gray-100">
           <div className="flex items-center gap-3">
             <div className="bg-green-100 p-3 rounded-full">
@@ -155,7 +138,6 @@ export default function ProfilePage() {
             </div>
           </div>
         </div>
-        
         <div className="bg-white p-4 rounded-lg shadow-md border border-gray-100">
           <div className="flex items-center gap-3">
             <div className="bg-red-100 p-3 rounded-full">
@@ -185,7 +167,6 @@ export default function ProfilePage() {
               <FaGavel className="flex-shrink-0" />
               <span>Mis subastas</span>
             </button>
-            
             <button
               onClick={() => setActiveTab('bids')}
               className={`flex items-center gap-3 w-full p-3 rounded-lg transition-colors text-left ${
@@ -197,7 +178,6 @@ export default function ProfilePage() {
               <FaMoneyBillWave className="flex-shrink-0" />
               <span>Mis pujas</span>
             </button>
-            
             <button
               onClick={() => setActiveTab('won')}
               className={`flex items-center gap-3 w-full p-3 rounded-lg transition-colors text-left ${
@@ -209,7 +189,6 @@ export default function ProfilePage() {
               <FaTrophy className="flex-shrink-0" />
               <span>Artículos ganados</span>
             </button>
-            
             <button
               onClick={() => setActiveTab('favorites')}
               className={`flex items-center gap-3 w-full p-3 rounded-lg transition-colors text-left ${
@@ -222,7 +201,6 @@ export default function ProfilePage() {
               <span>Favoritos</span>
             </button>
           </nav>
-
           <div className="mt-6 pt-4 border-t border-gray-200">
             <button
               onClick={handleLogout}
@@ -250,7 +228,6 @@ export default function ProfilePage() {
                   Crear nueva subasta
                 </Link>
               </div>
-              
               <div className="border rounded-lg divide-y">
                 <div className="p-8 text-center">
                   <FaGavel className="mx-auto text-4xl text-gray-300 mb-3" />
@@ -271,7 +248,6 @@ export default function ProfilePage() {
                 <FaMoneyBillWave className="text-blue-600" />
                 Mis pujas recientes
               </h2>
-              
               <div className="border rounded-lg divide-y">
                 <div className="p-8 text-center">
                   <FaMoneyBillWave className="mx-auto text-4xl text-gray-300 mb-3" />
@@ -292,7 +268,6 @@ export default function ProfilePage() {
                 <FaTrophy className="text-green-600" />
                 Artículos ganados
               </h2>
-              
               <div className="border rounded-lg divide-y">
                 <div className="p-8 text-center">
                   <FaTrophy className="mx-auto text-4xl text-gray-300 mb-3" />
@@ -313,7 +288,6 @@ export default function ProfilePage() {
                 <FaHeart className="text-red-600" />
                 Mis favoritos
               </h2>
-              
               <div className="border rounded-lg divide-y">
                 <div className="p-8 text-center">
                   <FaHeart className="mx-auto text-4xl text-gray-300 mb-3" />
