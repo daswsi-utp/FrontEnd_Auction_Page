@@ -1,12 +1,11 @@
 // src/app/auth/login/page.js
-
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import styles from './login.module.css';
-import axiosUsuario from '../../lib/axiosUsuario';
-import { setToken } from '../../utils/auth'; // Asegúrate que esta ruta sea correcta
+import axiosUsuario from '../../../lib/axiosUsuario';
+import { setToken } from '../../../utils/auth';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -32,11 +31,9 @@ export default function LoginPage() {
         throw new Error('No se recibió token de autenticación');
       }
 
-      // Guardar token y usuario
       setToken(token);
       localStorage.setItem('auctionUser', JSON.stringify(response.data.usuario));
 
-      // Redirigir al Home
       router.push('/');
     } catch (err) {
       setError(
