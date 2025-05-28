@@ -2,6 +2,8 @@ import './globals.css'
 import Header from '../components/Header'
 import NavBar from '../components/NavBar'
 
+import ChatBotBubble from '../components/chatbot/ChatBotBubble'
+
 export const metadata = {
   title: 'Subastas Premium',
   description: 'La plataforma de subastas más exclusiva en línea',
@@ -23,7 +25,9 @@ export default function RootLayout({ children }) {
             </footer>
           </div>
         </div>
+        <ChatBotBubble /> {/* BURBUJA DE CHAT BOT */}
       </body>
     </html>
   )
 }
+
