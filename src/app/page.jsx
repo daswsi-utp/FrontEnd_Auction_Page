@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { FaGavel, FaPlusCircle, FaSearch, FaHeart, FaStar } from 'react-icons/fa';
 
 // ✅ Ruta corregida a tu utilidad de autenticación
-import { isAuthenticated, getUserInfoFromToken } from './utils/auth';
+import { isAuthenticated, getUserInfoFromToken } from '../utils/auth';
 
 export default function HomePage() {
   const router = useRouter();
